@@ -1,0 +1,16 @@
+import React from 'react'
+
+export default function ProfilePage() {
+  return (
+    <div className='flex flex-col min-h-screen items-center justify-center px-4 py-12 '>
+
+        <h1 className='text-3xl m-7 text-center'>Profile Page</h1>
+    <hr />
+        <p className='text-center'>Welcome to your profile!</p>
+  
+
+</div>
+  )
+}
+
+ 
