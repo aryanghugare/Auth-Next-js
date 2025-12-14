@@ -1,4 +1,3 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
@@ -20,18 +19,33 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Auth-Next-js 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Password recovery flow
 
-## Deploy on Vercel
+A concise end-to-end flow and implementation notes for password reset:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. User submits their email to the "forgot password" endpoint.
+2. Server verifies the email exists in the database.
+3. Generate a secure random token (e.g. `crypto.randomBytes(32).toString('hex')`).
+4. Hash the token (e.g. SHA-256) and store the hashed token in the user's document along with an expiry timestamp (e.g. `Date.now() + 60*60*1000` for 1 hour).
+   - Use model fields like `forgotPasswordToken` (hashed) and `forgotPasswordTokenExpiry` (Date).
+5. Send an email containing a reset link with the plain token in the URL (e.g. `${BASE_URL}/reset-password/${token}`) using your configured mailer (nodemailer).
+6. User clicks the link → the front-end sends the token to the server (or the server reads it from the route).
+7. Server hashes the received token and compares it with the stored hashed token and checks that the expiry has not passed.
+8. If valid, allow the user to set a new password — hash the new password and save it.
+9. Invalidate the reset token fields (clear `forgotPasswordToken` and `forgotPasswordTokenExpiry`) so the link cannot be reused.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Auth-Next-js-
+Security and implementation notes
+
+- Never store the plain token in the database; store only a hashed version.
+- Use a short expiry (typically 1 hour) and single-use tokens.
+- Always send the reset link over HTTPS and validate the origin.
+- Rate-limit the forgot-password endpoint to prevent abuse and email enumeration.
+- Log and monitor reset requests for suspicious activity.
+- Consider additional protections: IP checks, device/session verification, and optional 2FA confirmation before allowing sensitive changes.
+- Use a reliable mail provider or transactional email service in production to avoid deliverability issues.
+
+Example model fields (already present in this project): `forgotPasswordToken`, `forgotPasswordTokenExpiry`.
