@@ -33,8 +33,8 @@ setLoading(false)
 
 const getUserDetails = async () =>{
 const res = await axios.get('/api/users/me')
-console.log(res.data)
 setData(res.data.data._id) // extracting the user_id 
+document.querySelector(".more")?.classList.remove("hidden");
 
 }
 
@@ -65,7 +65,6 @@ useEffect(() => {
     try {
       const res = await axios.get('/api/users/me');
       setInfo(res.data.data);
-      console.log(res.data.data); // log the fetched data, not the stale state
     } catch (err) {
       console.error(err);
     }
@@ -80,10 +79,11 @@ useEffect(() => {
         <h1 className='text-3xl m-7 text-center'>Profile Page</h1>
     <hr />
         <p className='text-center'>Welcome to your profile!</p>
-<h2>{data === "nothing" ? "Nothing" :<Link href={`/profile/${data}`}> {data}</Link> }</h2>
 
 <hr />
 <button className='bg-blue-500 text-white px-4 py-2 rounded m-6' onClick={getUserDetails} > User Details</button>
+<h2 className='hidden more' >{data === "nothing" ? "Nothing" :<Link href={`/profile/${data}`}> Tap to see more details </Link> }</h2>
+
 <div className='details-box'>
 
 </div>
