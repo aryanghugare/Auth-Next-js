@@ -1,6 +1,7 @@
 "use client";
 // here because of "use client" console.logs in the pages will be seen in the browser
 //  all the console.log in the api will be available in the terminal  
+// because of "use client" we could use useState and useEffect here and also other react hooks
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/navigation";
