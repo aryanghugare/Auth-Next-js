@@ -12,7 +12,7 @@ try {
     const reqBody = await request.json();
 // This is because , there will be frontend call to this api with the token
     const { token } = reqBody;
-console.log(token);
+// console.log(token);
 
 const user =  await User.findOne({
 verifyToken : token,
@@ -23,9 +23,8 @@ verifyTokenExpiry : { $gt : Date.now() } // checking the token expiry
 if(!user){
     return NextResponse.json({error: "Invalid or expired token"}, {status: 400});
 }
-
-console.log(user);
-user.isVerified = true;
+// There is a spelling mistake in isVerified field in user model
+user.isVerfied = true;
 user.verifyToken = undefined;
 user.verifyTokenExpiry = undefined;
 

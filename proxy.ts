@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
 const path = request.nextUrl.pathname;
 
-const isPublicPath = ['/login', '/signup'].includes(path);
+const isPublicPath = ['/login', '/signup','/verifyemail'].includes(path);
 const token = request.cookies.get('token')?.value || "";
 
 //protecting the public routes
@@ -28,5 +28,6 @@ export const config = {
 '/profile',
 '/login',
 '/signup',
+'/verifyemail',
 ],
 };
