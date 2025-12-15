@@ -10,6 +10,11 @@ export default function ProfilePage() {
 const router = useRouter();
 const [loading , setLoading] = useState(false);
 const [data,setData] = useState("nothing");
+const [info , setInfo] = useState({
+username : "",
+email:"",
+isVerfied : ""
+});
 
 const handleLogout = async () => {
 try {
@@ -35,6 +40,7 @@ setData(res.data.data._id) // extracting the user_id
 
 
 // This is my method of injecting the data coming from the 'me' route 
+// This is the wrong way , useEffect is the right one 
 /*
 let details : any = {
 
@@ -54,6 +60,19 @@ document.querySelector('.details-box')!.innerHTML =
 */
 
 
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get('/api/users/me');
+      setInfo(res.data.data);
+      console.log(res.data.data); // log the fetched data, not the stale state
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  fetchUser();
+}, []);
+
 
   return (
     <div className='flex flex-col min-h-screen items-center justify-center px-4 py-12 '>
@@ -66,6 +85,17 @@ document.querySelector('.details-box')!.innerHTML =
 <hr />
 <button className='bg-blue-500 text-white px-4 py-2 rounded m-6' onClick={getUserDetails} > User Details</button>
 <div className='details-box'>
+
+</div>
+
+<div className='Info'>
+<div className="w-full max-w-md bg-white/5 backdrop-blur-sm border border-white/6 rounded-2xl shadow-lg p-6 mt-4 text-left">
+ <p className="text-xs text-neutral-400">Username</p>
+ <p className="text-lg font-semibold text-white">{info?.username}</p> 
+<p className="mt-4 text-xs text-neutral-400">Email</p> 
+<p className="text-lg font-medium text-white">{info?.email ?? "—"}</p> 
+<p className="mt-4 text-xs text-neutral-400">Verified</p> 
+<p className="text-sm font-medium text-amber-300">{info?.isVerfied ? "Yes" : "No"}</p> </div>
 
 </div>
 
