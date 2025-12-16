@@ -82,6 +82,12 @@ onClick={onLogin}
 >
 {buttonDisabled ? "Fill all the above" : "Login"}
 </button>
+
+{/* Forgot password section */}
+<div className="mt-2 text-sm">
+  <Link href="/forgotpassword" className="text-red-600 hover:underline text">Forgot password?</Link>
+</div>
+
 <hr />
 <h3>New here ?</h3>
 <Link className="border-2 m-2 border-white px-8 rounded-lg" href="/signup">Sign up </Link>
